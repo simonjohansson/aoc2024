@@ -15,10 +15,7 @@ data class Day1(val input: String) {
             list2.add(list[1])
         }
 
-        list1.sort()
-        list2.sort()
-
-        return Pair(list1.toList(), list2.toList())
+        return Pair(list1.sorted(), list2.sorted())
     }
 
     fun part1() = parse().first.zip(parse().second).sumOf {

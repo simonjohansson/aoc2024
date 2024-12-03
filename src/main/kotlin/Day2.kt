@@ -16,7 +16,7 @@ private data class Report(val levels: List<Int>) {
 
     fun Safe(problemDampener: Boolean = false) =
         if (problemDampener) safe() or subsets().any { it.safe() } else safe()
-    
+
 }
 
 data class Day2(val input: String) {
