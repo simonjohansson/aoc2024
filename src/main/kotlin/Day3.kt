@@ -24,11 +24,11 @@ data class Day3(val input: String) {
             .sumOf { it.a * it.b }
     }
 
-    fun part2() = parse().fold(Pair(0, true), { (acc, shouldMul), op ->
+    fun part2() = parse().fold(Pair(0, true)) { (acc, shouldMul), op ->
         when (op) {
             is Day3Option.Do -> Pair(acc, true)
             is Day3Option.Dont -> Pair(acc, false)
             is Day3Option.Mul -> Pair(acc + (op.a * op.b * if (shouldMul) 1 else 0), shouldMul)
         }
-    }).first
+    }.first
 }
