@@ -43,21 +43,18 @@ data class Day5(val input: String) {
         }
     }
 
-    private fun findCorrectOrder(update: Update, rules: Rules): Update {
-        val map = HashMap<Int, List<Int>>()
-        for (page in update.pages) {
-            val m = map.getOrElse(page) { emptyList() }
-            map[page] = m + rules.filter { it.firsPage == page && it.secondPage in update.pages }.map { it.secondPage }
-        }
-
-        return map
-            .map { (k, v) -> Pair(k, v.count()) }
+    private fun findCorrectOrder(update: Update, rules: Rules) =
+        update.pages.fold(mutableMapOf<Int, List<Int>>()) { acc, page ->
+            acc[page] = acc.getOrDefault(page, emptyList()) +
+                    rules.filter { it.firsPage == page && it.secondPage in update.pages }.map { it.secondPage }
+            acc
+        }.map { (k, v) -> Pair(k, v.count()) }
             .sortedByDescending { it.second }
             .map { it.first }
             .let {
                 Update(it)
             }
-    }
+
 
     fun middleNumber(update: Update) =
         update.pages[floor(update.pages.count() / 2.0).toInt()]
