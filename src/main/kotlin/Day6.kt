@@ -78,27 +78,22 @@ data class Day6(val input: String) {
         }
     }
 
-    fun traverse(input: Day6Input): Pair<List<Guard>, Boolean> {
-        val visited = mutableListOf<Guard>()
-        var guard = input.guard
-        while (true) {
-            if (guard in visited) {
-                return visited to true
-            }
-            visited.add(guard)
-            when (peek(input.lines, guard)) {
-                "OOB" -> break
-                '#' -> {
-                    guard = guard.changeDirection()
-                    // Sneaky edgecase.
-                    if (peek(input.lines, guard) == '#') {
-                        guard = guard.changeDirection()
-                    }
-                }
-            }
-            guard = guard.move()
+    fun t(
+        lines: List<String>,
+        guard: Guard,
+        visited: MutableList<Guard>,
+        seen: MutableSet<Guard>
+    ): Pair<List<Guard>, Boolean> =
+        if (seen.contains(guard)) visited to true
+        else when (peek(lines, guard)) {
+            "OOB" -> visited.apply { add(guard) } to false
+            '#' -> t(lines, guard.changeDirection(), visited.apply { add(guard) }, seen.apply { add(guard) })
+            else -> t(lines, guard.move(), visited.apply { add(guard) }, seen.apply { add(guard) })
         }
-        return visited to false
+
+
+    fun traverse(input: Day6Input): Pair<List<Guard>, Boolean> {
+        return t(input.lines, input.guard, mutableListOf(), mutableSetOf())
     }
 
     fun part1() = Day6Input.parse(input).let { input ->
@@ -108,6 +103,7 @@ data class Day6(val input: String) {
     fun part2(): Int {
         return Day6Input.parse(input).let { input ->
             traverse(input).first
+                .asSequence()
                 .map { Pair(it.x, it.y) }.toSet()
                 .filter { (x, y) -> !(input.guard.x == x && input.guard.y == y) }
                 .map { (x, y) ->
@@ -115,9 +111,7 @@ data class Day6(val input: String) {
                         if (index == y) line.mapIndexed { i, c -> if (i == x) '#' else c }.joinToString("")
                         else line
                     }, input.guard)
-                }.filterIndexed { index, it ->
-                    println(index)
-                    traverse(it).second}
-        }.count()
+                }.count { traverse(it).second }
+        }
     }
 }

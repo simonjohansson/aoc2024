@@ -33,10 +33,12 @@ class Day6Test {
         val expected = listOf(
             Guard(x=2, y=0, direction= Direction.RIGHT),
             Guard(x=3, y=0, direction= Direction.RIGHT),
+            Guard(x=3, y=0, direction= Direction.DOWN),
+            Guard(x=3, y=0, direction= Direction.LEFT),
             Guard(x=2, y=0, direction= Direction.LEFT),
             Guard(x=1, y=0, direction= Direction.LEFT),
             Guard(x=0, y=0, direction= Direction.LEFT)
-        )
+        ) to false
         val input = Day6Input.parse(inputStr)
         assertEquals(expected, Day6(inputStr).traverse(input))
     }
