@@ -78,22 +78,46 @@ data class Day6(val input: String) {
         }
     }
 
-
-    fun part1() = Day6Input.parse(input).let { input ->
-        var visited = listOf<Pair<Int, Int>>()
-
+    fun traverse(input: Day6Input): Pair<List<Guard>, Boolean> {
+        val visited = mutableListOf<Guard>()
         var guard = input.guard
         while (true) {
-            visited = visited + Pair(guard.x, guard.y)
-
+            if (guard in visited) {
+                return visited to true
+            }
+            visited.add(guard)
             when (peek(input.lines, guard)) {
                 "OOB" -> break
                 '#' -> {
                     guard = guard.changeDirection()
+                    // Sneaky edgecase.
+                    if (peek(input.lines, guard) == '#') {
+                        guard = guard.changeDirection()
+                    }
                 }
             }
             guard = guard.move()
         }
-        visited.toSet().count()
+        return visited to false
+    }
+
+    fun part1() = Day6Input.parse(input).let { input ->
+        traverse(input).first.map { Pair(it.x, it.y) }.toSet().count()
+    }
+
+    fun part2(): Int {
+        return Day6Input.parse(input).let { input ->
+            traverse(input).first
+                .map { Pair(it.x, it.y) }.toSet()
+                .filter { (x, y) -> !(input.guard.x == x && input.guard.y == y) }
+                .map { (x, y) ->
+                    Day6Input(input.lines.mapIndexed { index, line ->
+                        if (index == y) line.mapIndexed { i, c -> if (i == x) '#' else c }.joinToString("")
+                        else line
+                    }, input.guard)
+                }.filterIndexed { index, it ->
+                    println(index)
+                    traverse(it).second}
+        }.count()
     }
 }

@@ -24,7 +24,30 @@ class Day6Test {
     }
 
     @Test
+    fun testNastyEdgeCase() {
+        val inputStr = """
+            ..>.#
+            ...#.
+        """.trimIndent()
+
+        val expected = listOf(
+            Guard(x=2, y=0, direction= Direction.RIGHT),
+            Guard(x=3, y=0, direction= Direction.RIGHT),
+            Guard(x=2, y=0, direction= Direction.LEFT),
+            Guard(x=1, y=0, direction= Direction.LEFT),
+            Guard(x=0, y=0, direction= Direction.LEFT)
+        )
+        val input = Day6Input.parse(inputStr)
+        assertEquals(expected, Day6(inputStr).traverse(input))
+    }
+
+    @Test
     fun part1() {
         assertEquals(41, Day6(Reader().Read("day6.example1.txt")).part1())
+    }
+
+    @Test
+    fun part2() {
+        assertEquals(6, Day6(Reader().Read("day6.example1.txt")).part2())
     }
 }
