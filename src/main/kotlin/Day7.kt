@@ -1,48 +1,33 @@
 package org.example
 
 data class Node(val value: Long, var left: Node? = null, var middle: Node? = null, var right: Node? = null) {
-    fun applyNumAtLeafNodes(num: Long): Node {
-        if (left == null && right == null) {
-            return this.apply {
-                left = Node(this.value + num)
-                middle = Node("${this.value}${num}".toLong())
-                right = Node(this.value * num)
-            }
-        } else {
-            return this.apply {
-                left = left!!.applyNumAtLeafNodes(num)
-                middle = middle!!.applyNumAtLeafNodes(num)
-                right = right!!.applyNumAtLeafNodes(num)
-            }
-        }
+    private fun isLeafNode() = left == null && middle == null && right == null
+
+    fun applyNumAtLeafNodes(num: Long): Node = apply {
+        left = left?.applyNumAtLeafNodes(num) ?: Node(value + num)
+        middle = middle?.applyNumAtLeafNodes(num) ?: Node("${value}${num}".toLong())
+        right = right?.applyNumAtLeafNodes(num) ?: Node(value * num)
     }
 
-    fun findAllLeafNodeValues(includeMiddle: Boolean): List<Long> {
-        if (this.left == null && this.right == null && this.middle == null) {
-            return listOf(this.value)
-        }
-
-        return this.left!!.findAllLeafNodeValues(includeMiddle) +
-                this.right!!.findAllLeafNodeValues(includeMiddle) +
-                if (includeMiddle) this.middle!!.findAllLeafNodeValues(includeMiddle) else listOf()
-    }
+    fun findAllLeafNodeValues(includeMiddle: Boolean): List<Long> = if (isLeafNode()) listOf(value) else
+        left!!.findAllLeafNodeValues(includeMiddle) + right!!.findAllLeafNodeValues(includeMiddle) +
+                if (includeMiddle) middle!!.findAllLeafNodeValues(includeMiddle) else listOf()
 }
 
 data class Day7Line(val wanted: Long, val numbers: List<Long>) {
-    fun isTrue(includeMiddle: Boolean = false) = numbers.drop(1).fold(Node(numbers.first())) { acc, num ->
-        acc.applyNumAtLeafNodes(num)
-    }.findAllLeafNodeValues(includeMiddle).any { it == wanted }
-
+    fun isTrue(includeMiddle: Boolean = false) = numbers.drop(1)
+        .fold(Node(numbers.first())) { acc, num -> acc.applyNumAtLeafNodes(num) }
+        .findAllLeafNodeValues(includeMiddle).any { it == wanted }
 
     companion object {
-        fun parse(input: String): List<Day7Line> =
-            input.lines().map { line ->
-                line.split(":").let { parts ->
-                    Day7Line(
-                        parts[0].toLong(),
-                        parts[1].trim().split(" ").map { it.toLong() })
-                }
+        fun parse(input: String) = input.lines().map { line ->
+            line.split(":").let { parts ->
+                Day7Line(
+                    parts[0].toLong(),
+                    parts[1].trim().split(" ").map { it.toLong() }
+                )
             }
+        }
     }
 }
 
@@ -54,5 +39,4 @@ data class Day7(val input: String) {
     fun part2() = Day7Line.parse(input)
         .filter { it.isTrue(true) }
         .sumOf { it.wanted }
-
 }
