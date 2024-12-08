@@ -48,22 +48,67 @@ class Day8Test {
             (3 to 3) to (4 to 4),
         )
 
-        assertEquals(expected, input.findPermutations())
+        assertEquals(expected, input.findPairs())
     }
 
     @Test
     fun `find antiNodes`() {
-        assertEquals(listOf(-3 to -3), ((0 to 0) to (3 to 3)).findAntiNodes().first.take(1).toList())
-        assertEquals(listOf(6 to 6), ((0 to 0) to (3 to 3)).findAntiNodes().second.take(1).toList())
+        assertEquals(
+            listOf(0 to 0, -3 to -3, -6 to -6, -9 to -9),
+            ((0 to 0) to (3 to 3)).findAntiNodes().first.take(4).toList()
+        )
+        assertEquals(
+            listOf(3 to 3, 6 to 6, 9 to 9, 12 to 12),
+            ((0 to 0) to (3 to 3)).findAntiNodes().second.take(4).toList()
+        )
 
-        assertEquals(listOf(0 to -3), ((0 to 0) to (0 to 3)).findAntiNodes().first.take(1).toList())
-        assertEquals(listOf(0 to 6), ((0 to 0) to (0 to 3)).findAntiNodes().second.take(1).toList())
+        assertEquals(
+            listOf(0 to 0, 0 to -3, 0 to -6, 0 to -9),
+            ((0 to 0) to (0 to 3)).findAntiNodes().first.take(4).toList()
+        )
+        assertEquals(
+            listOf(0 to 3, 0 to 6, 0 to 9, 0 to 12),
+            ((0 to 0) to (0 to 3)).findAntiNodes().second.take(4).toList()
+        )
 
-        assertEquals(listOf(-3 to 0), ((0 to 0) to (3 to 0)).findAntiNodes().first.take(1).toList())
-        assertEquals(listOf(6 to 0), ((0 to 0) to (3 to 0)).findAntiNodes().second.take(1).toList())
+        assertEquals(
+            listOf(0 to 0, -3 to 0, -6 to 0, -9 to 0),
+            ((0 to 0) to (3 to 0)).findAntiNodes().first.take(4).toList()
+        )
+        assertEquals(
+            listOf(3 to 0, 6 to 0, 9 to 0, 12 to 0),
+            ((0 to 0) to (3 to 0)).findAntiNodes().second.take(4).toList()
+        )
 
-        assertEquals(listOf(6 to -3), ((3 to 0) to (0 to 3)).findAntiNodes().first.take(1).toList())
-        assertEquals(listOf(-3 to 6), ((3 to 0) to (0 to 3)).findAntiNodes().second.take(1).toList())
+        assertEquals(
+            listOf(3 to 0, 6 to -3, 9 to -6, 12 to -9),
+            ((3 to 0) to (0 to 3)).findAntiNodes().first.take(4).toList()
+        )
+        assertEquals(
+            listOf(0 to 3, -3 to 6, -6 to 9, -9 to 12),
+            ((3 to 0) to (0 to 3)).findAntiNodes().second.take(4).toList()
+        )
+    }
+
+    @Test
+    fun kehe() {
+        val input = """
+            T.........
+            ...T......
+            .T........
+            ..........
+            ..........
+            ..........
+            ..........
+            ..........
+            ..........
+            ..........
+        """.trimIndent()
+
+        println(
+            Day8Input.parse(input)
+                .findAntiNodes(true)
+        )
     }
 
     @Test
@@ -74,6 +119,5 @@ class Day8Test {
     @Test
     fun part2() {
         assertEquals(34, Day8(Reader().Read("day8.example1.txt")).part2())
-
     }
 }

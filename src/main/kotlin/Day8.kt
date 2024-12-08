@@ -5,26 +5,25 @@ import kotlin.math.abs
 typealias Cord = Pair<Int, Int>
 typealias CordPair = Pair<Cord, Cord>
 
-
 fun CordPair.findAntiNodes(): Pair<Sequence<Cord>, Sequence<Cord>> =
     this.let { (c1, c2) ->
         val xDelta = abs(c1.first - c2.first)
         val yDelta = abs(c1.second - c2.second)
         if (c1.first < c2.first)
             Pair(
-                sequenceOf(c1.first - xDelta to c1.second - yDelta),
-                sequenceOf(c2.first + xDelta to c2.second + yDelta)
+                generateSequence(c1) { it.first - xDelta to it.second - yDelta },
+                generateSequence(c2) { it.first + xDelta to it.second + yDelta }
             )
         else
             Pair(
-                sequenceOf(c1.first + xDelta to c1.second - yDelta),
-                sequenceOf(c2.first - xDelta to c2.second + yDelta)
+                generateSequence(c1) { it.first + xDelta to it.second - yDelta },
+                generateSequence(c2) { it.first - xDelta to it.second + yDelta }
             )
     }
 
 typealias Cords = List<Cord>
 
-fun Cords.findPermutations() =
+fun Cords.findPairs() =
     (0..<this.count()).flatMap { i ->
         (i + 1..<this.count()).map { j ->
             Pair(this[i], this[j])
@@ -61,10 +60,13 @@ class Day8Input(val maxX: Int, val maxY: Int, val antennas: Map<Char, Cords>) {
         cord.first < 0 || cord.first > maxX || cord.second < 0 || cord.second > maxY
 
     fun findAntiNodes(includeResonantHarmonics: Boolean = false) = this.antennas.flatMap { (_, antennas) ->
-        antennas.findPermutations()
-            .flatMap {
-                it.findAntiNodes().let { (a1: Sequence<Pair<Int, Int>>, a2: Sequence<Pair<Int, Int>>) ->
-                    a1.takeWhile { a -> !isOOB(a) } + a2.takeWhile { a -> !isOOB(a) }
+        antennas.findPairs()
+            .flatMap { pair ->
+                pair.findAntiNodes().let { (a1, a2) ->
+                    if (includeResonantHarmonics) a1.takeWhile { a -> !isOOB(a) } + a2.takeWhile { a -> !isOOB(a) }
+                    else
+                        a1.drop(1).take(1).takeWhile { a -> !isOOB(a) } +
+                                a2.drop(1).take(1).takeWhile { a -> !isOOB(a) }
                 }
             }
     }
