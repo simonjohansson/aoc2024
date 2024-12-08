@@ -53,38 +53,27 @@ class Day8Test {
 
     @Test
     fun `find antiNodes`() {
-        assertEquals(
-            listOf(
-                (-3 to -3),
-                (6 to 6),
-            ), ((0 to 0) to (3 to 3)).findAntiNodes()
-        )
+        assertEquals(listOf(-3 to -3), ((0 to 0) to (3 to 3)).findAntiNodes().first.take(1).toList())
+        assertEquals(listOf(6 to 6), ((0 to 0) to (3 to 3)).findAntiNodes().second.take(1).toList())
 
-        assertEquals(
-            listOf(
-                (0 to -3),
-                (0 to 6),
-            ), ((0 to 0) to (0 to 3)).findAntiNodes()
-        )
+        assertEquals(listOf(0 to -3), ((0 to 0) to (0 to 3)).findAntiNodes().first.take(1).toList())
+        assertEquals(listOf(0 to 6), ((0 to 0) to (0 to 3)).findAntiNodes().second.take(1).toList())
 
-        assertEquals(
-            listOf(
-                (0 to -3),
-                (0 to 6),
-            ), ((0 to 0) to (0 to 3)).findAntiNodes()
-        )
+        assertEquals(listOf(-3 to 0), ((0 to 0) to (3 to 0)).findAntiNodes().first.take(1).toList())
+        assertEquals(listOf(6 to 0), ((0 to 0) to (3 to 0)).findAntiNodes().second.take(1).toList())
 
-        assertEquals(
-            listOf(
-                (6 to -3),
-                (-3 to 6),
-            ), ((3 to 0) to (0 to 3)).findAntiNodes()
-        )
-
+        assertEquals(listOf(6 to -3), ((3 to 0) to (0 to 3)).findAntiNodes().first.take(1).toList())
+        assertEquals(listOf(-3 to 6), ((3 to 0) to (0 to 3)).findAntiNodes().second.take(1).toList())
     }
 
     @Test
     fun part1() {
         assertEquals(14, Day8(Reader().Read("day8.example1.txt")).part1())
+    }
+
+    @Test
+    fun part2() {
+        assertEquals(34, Day8(Reader().Read("day8.example1.txt")).part2())
+
     }
 }

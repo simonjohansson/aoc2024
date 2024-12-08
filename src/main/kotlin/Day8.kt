@@ -5,19 +5,20 @@ import kotlin.math.abs
 typealias Cord = Pair<Int, Int>
 typealias CordPair = Pair<Cord, Cord>
 
-fun CordPair.findAntiNodes() =
+
+fun CordPair.findAntiNodes(): Pair<Sequence<Cord>, Sequence<Cord>> =
     this.let { (c1, c2) ->
         val xDelta = abs(c1.first - c2.first)
         val yDelta = abs(c1.second - c2.second)
         if (c1.first < c2.first)
-            listOf(
-                c1.first - xDelta to c1.second - yDelta,
-                c2.first + xDelta to c2.second + yDelta
+            Pair(
+                sequenceOf(c1.first - xDelta to c1.second - yDelta),
+                sequenceOf(c2.first + xDelta to c2.second + yDelta)
             )
         else
-            listOf(
-                c1.first + xDelta to c1.second - yDelta,
-                c2.first - xDelta to c2.second + yDelta
+            Pair(
+                sequenceOf(c1.first + xDelta to c1.second - yDelta),
+                sequenceOf(c2.first - xDelta to c2.second + yDelta)
             )
     }
 
@@ -50,8 +51,8 @@ class Day8Input(val maxX: Int, val maxY: Int, val antennas: Map<Char, Cords>) {
 
 
         fun parse(input: String) = Day8Input(
-            maxX = input.lines().first().count()-1,
-            maxY = input.lines().count()-1,
+            maxX = input.lines().first().count() - 1,
+            maxY = input.lines().count() - 1,
             antennas = findAntennas(input.lines())
         )
     }
@@ -59,17 +60,24 @@ class Day8Input(val maxX: Int, val maxY: Int, val antennas: Map<Char, Cords>) {
     private fun isOOB(cord: Cord) =
         cord.first < 0 || cord.first > maxX || cord.second < 0 || cord.second > maxY
 
-    fun findAntiNodes() = this.antennas.flatMap { (_, antennas) ->
+    fun findAntiNodes(includeResonantHarmonics: Boolean = false) = this.antennas.flatMap { (_, antennas) ->
         antennas.findPermutations()
-            .flatMap { it.findAntiNodes() }
-            .filter { !isOOB(it)}
+            .flatMap {
+                it.findAntiNodes().let { (a1: Sequence<Pair<Int, Int>>, a2: Sequence<Pair<Int, Int>>) ->
+                    a1.takeWhile { a -> !isOOB(a) } + a2.takeWhile { a -> !isOOB(a) }
+                }
+            }
     }
-
 }
 
 data class Day8(val input: String) {
     fun part1() = Day8Input.parse(input)
         .findAntiNodes()
+        .toSet()
+        .count()
+
+    fun part2() = Day8Input.parse(input)
+        .findAntiNodes(true)
         .toSet()
         .count()
 }
