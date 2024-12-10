@@ -58,4 +58,10 @@ data class Day10(val input: String) {
             grid.findPaths(startPosition).map { it.last() }.toSet().count()
         }
     }
+
+    fun part2() = Day10Input.parse(input).let { grid ->
+        grid.findStartPositions().sumOf { startPosition ->
+            grid.findPaths(startPosition).count()
+        }
+    }
 }

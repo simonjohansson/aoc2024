@@ -84,4 +84,9 @@ class Day10Test {
         assertEquals(4, Day10(input2).part1())
         assertEquals(36, Day10(Reader.Read("day10.example1.txt")).part1())
     }
+
+    @Test
+    fun part2() {
+        assertEquals(81, Day10(Reader.Read("day10.example1.txt")).part2())
+    }
 }
