@@ -20,7 +20,7 @@ class Day6Test {
             ),
             Guard(4, 6, Direction.UP)
         )
-        assertEquals(expected, Day6Input.parse(Reader().Read("day6.example1.txt")))
+        assertEquals(expected, Day6Input.parse(Reader.Read("day6.example1.txt")))
     }
 
     @Test
@@ -45,11 +45,11 @@ class Day6Test {
 
     @Test
     fun part1() {
-        assertEquals(41, Day6(Reader().Read("day6.example1.txt")).part1())
+        assertEquals(41, Day6(Reader.Read("day6.example1.txt")).part1())
     }
 
     @Test
     fun part2() {
-        assertEquals(6, Day6(Reader().Read("day6.example1.txt")).part2())
+        assertEquals(6, Day6(Reader.Read("day6.example1.txt")).part2())
     }
 }

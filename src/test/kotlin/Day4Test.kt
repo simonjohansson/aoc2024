@@ -63,12 +63,12 @@ class Day4Test {
 
     @Test
     fun part1() {
-        assertEquals(18, Day4(Reader().Read("day4.example1.txt")).part1())
+        assertEquals(18, Day4(Reader.Read("day4.example1.txt")).part1())
     }
 
     @Test
     fun part2() {
-        assertEquals(9, Day4(Reader().Read("day4.example2.txt")).part2())
+        assertEquals(9, Day4(Reader.Read("day4.example2.txt")).part2())
     }
 
 }

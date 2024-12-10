@@ -24,9 +24,9 @@ class Day8Test {
             ),
         )
 
-        assertEquals(expected.maxX, Day8Input.parse(Reader().Read("day8.example1.txt")).maxX)
-        assertEquals(expected.maxY, Day8Input.parse(Reader().Read("day8.example1.txt")).maxY)
-        assertEquals(expected.antennas, Day8Input.parse(Reader().Read("day8.example1.txt")).antennas)
+        assertEquals(expected.maxX, Day8Input.parse(Reader.Read("day8.example1.txt")).maxX)
+        assertEquals(expected.maxY, Day8Input.parse(Reader.Read("day8.example1.txt")).maxY)
+        assertEquals(expected.antennas, Day8Input.parse(Reader.Read("day8.example1.txt")).antennas)
     }
 
     @Test
@@ -113,11 +113,11 @@ class Day8Test {
 
     @Test
     fun part1() {
-        assertEquals(14, Day8(Reader().Read("day8.example1.txt")).part1())
+        assertEquals(14, Day8(Reader.Read("day8.example1.txt")).part1())
     }
 
     @Test
     fun part2() {
-        assertEquals(34, Day8(Reader().Read("day8.example1.txt")).part2())
+        assertEquals(34, Day8(Reader.Read("day8.example1.txt")).part2())
     }
 }

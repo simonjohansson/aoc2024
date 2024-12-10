@@ -24,11 +24,11 @@ class Day7Test {
 
     @Test
     fun part1() {
-        assertEquals(3749, Day7(Reader().Read("day7.example1.txt")).part1())
+        assertEquals(3749, Day7(Reader.Read("day7.example1.txt")).part1())
     }
 
     @Test
     fun part2() {
-        assertEquals(11387, Day7(Reader().Read("day7.example1.txt")).part2())
+        assertEquals(11387, Day7(Reader.Read("day7.example1.txt")).part2())
     }
 }
