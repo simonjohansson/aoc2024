@@ -57,8 +57,8 @@ data class Day9Input(val blocks: List<Block>) {
             val lastFileIndex = tmp.indexOfLast { it is File }
             val lastFile = tmp[lastFileIndex] as File
 
-            tmp[lastFileIndex] = lastFile.copy(size = lastFile.size - 1)
-            tmp[firstFreeIndex] = firstFree.copy(size = firstFree.size - 1)
+            tmp[lastFileIndex] = lastFile.decreasSize()
+            tmp[firstFreeIndex] = firstFree.decreasSize()
 
             tmp = (tmp.subList(0, firstFreeIndex) +
                     File(lastFile.index) +
@@ -114,30 +114,22 @@ data class Day9Input(val blocks: List<Block>) {
 }
 
 data class Day9(val input: String) {
-    fun part1() = Day9Input.parse(input).fragment().let { disk ->
-        generateSequence(0.toLong()) { it + 1 }.zip(disk.flatten().takeWhile { it is File }.map { it as File }
-            .asSequence())
-            .sumOf { (i, f) ->
-                i * f.index
+    fun sum(blocks: List<Block>) = generateSequence(0.toLong()) { it + 1 }.zip(blocks.asSequence())
+        .sumOf { (i, f) ->
+            when (f) {
+                is File -> i * f.index
+                is Free -> 0
             }
+        }
+
+
+    fun part1() = Day9Input.parse(input).let { disk ->
+        sum(disk.fragment().flatten())
     }
 
+
     fun part2() = Day9Input.parse(input).let { disk ->
-        disk.moveFiles().flatten().let { b ->
-            generateSequence(0.toLong()) { it + 1 }.zip(b.asSequence())
-                .sumOf { (i, f) ->
-                    when(f) {
-                        is File -> i * f.index
-                        is Free -> 0
-                    }
-                }
-        }
-//        generateSequence(0.toLong()) { it + 1 }
-//            .zip(disk.flatten().filter { it is File }.map { it as File }
-//            .asSequence())
-//            .sumOf { (i, f) ->
-//                i * f.index
-//            }
+        sum(disk.moveFiles().flatten())
     }
 
 }
