@@ -7,5 +7,5 @@ class Reader() {
 }
 
 fun main() {
-    println(Day11("773 79858 0 71 213357 2937 1 3998391").part1())
+    println(Day11("773 79858 0 71 213357 2937 1 3998391").part2())
 }
