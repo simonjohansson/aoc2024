@@ -1,12 +1,24 @@
 package org.example
 
-import javax.swing.text.html.HTML.Tag.P
+import java.util.*
+import java.util.Optional.empty
+import kotlin.jvm.optionals.getOrElse
+
 
 data class ClawMachine(val A: Pair<Int, Int>, val B: Pair<Int, Int>, val P: Pair<Int, Int>) {
-    fun play(): Pair<Int, Int> {
+    private fun check(result: Pair<Int, Int>): Boolean {
+        val (px, py) = P
+        val (ax, ay) = A
+        val (bx, by) = B
+        val (a, b) = result
+
+        return px == (a * ax + b * bx) && py == (a * ay + b * by)
+    }
+
+    fun play(): Optional<Pair<Int, Int>> {
         val a = ((P.first * B.second) - (P.second * B.first)) / ((A.first * B.second) - (A.second * B.first))
         val b = ((A.first * P.second) - (A.second * P.first)) / ((A.first * B.second) - (A.second * B.first))
-        return Pair(a, b)
+        return if (check(Pair(a, b))) Optional.of(Pair(a, b)) else empty()
     }
 }
 
@@ -32,17 +44,9 @@ data class Day13(val clawMachines: List<ClawMachine>) {
         }
     }
 
-    private fun check(machine: ClawMachine, AB: Pair<Int, Int> ): Boolean {
-        val (px, py) = machine.P
-        val (ax, ay) = machine.A
-        val (bx, by) = machine.B
-        val (A, B) = AB
-
-        return px == (A*ax + B*bx) && py == (A*ay + B*by)
-    }
-
     fun part1() = clawMachines
-        .map { Pair(it, it.play()) }
-        .filter { check(it.first, it.second) }
-        .sumOf { it.second.first*3 + it.second.second*1 }
+        .map { it.play() }
+        .sumOf { result ->
+            result.map { it.first * 3 + it.second }.getOrElse { 0 }
+        }
 }
