@@ -1,6 +1,7 @@
 import org.example.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import java.util.Optional
 import javax.swing.text.html.HTMLEditorKit.Parser
 
 class Day13Test {
@@ -17,8 +18,8 @@ class Day13Test {
         """.trimIndent()
 
         val expected = listOf(
-            ClawMachine((94 to 34), (22 to 67), (8400 to 5400)),
-            ClawMachine((26 to 66), (67 to 21), (12748 to 12176))
+            ClawMachine((94L to 34L), (22L to 67L), (8400L to 5400L)),
+            ClawMachine((26L to 66L), (67L to 21L), (12748L to 12176L))
 
         )
 
@@ -27,9 +28,9 @@ class Day13Test {
 
     @Test
     fun play() {
-        assertEquals((80 to 40), ClawMachine((94 to 34), (22 to 67), (8400 to 5400)).play())
-        assertEquals((141 to 135), ClawMachine((26 to 66), (67 to 21), (12748 to 12176)).play())
-        assertEquals((244 to 65), ClawMachine((69 to 23), (27 to 71), (18641 to 10279)).play())
+        assertEquals(Optional.of(80L to 40L), ClawMachine((94L to 34), (22L to 67), (8400L to 5400)).play())
+        assertEquals(Optional.empty<Pair<Long,Long>>(), ClawMachine((26L to 66), (67L to 21), (12748L to 12176)).play())
+        assertEquals(Optional.empty<Pair<Long,Long>>(), ClawMachine((69L to 23), (27L to 71), (18641L to 10279)).play())
     }
 
     @Test
