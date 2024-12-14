@@ -67,7 +67,29 @@ data class Day14(val robots: List<Robot>, val width: Int = 101, val height: Int 
                 }
             }
         }.let { robotsPerQuandrant ->
-            robotsPerQuandrant.fold(1) {acc, i -> acc * i }
+            robotsPerQuandrant.fold(1) { acc, i -> acc * i }
         }
+    }
+
+    fun part2() {
+        generateSequence(0) { it + 1 }
+            .first { num ->
+                println(num)
+                val grid =
+                    generateSequence { generateSequence { " " }.take(width).toMutableList() }.take(height)
+                        .toMutableList()
+                robots.map { it.move(width, height, num) }.fold(grid) { acc, robot ->
+                    acc[robot.p.second][robot.p.first] = "x"
+                    acc
+                }
+
+//                if (grid.joinToString { "\n" }.contains("xxxxxxxx")) {
+                val strGrid = grid.joinToString("\n") { it.joinToString("") }
+                if (strGrid.contains("xxxxxxxx")) {
+                    println(strGrid)
+                    return@first true
+                }
+                false
+            }
     }
 }
