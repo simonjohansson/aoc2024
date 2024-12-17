@@ -7,5 +7,5 @@ class Reader() {
 }
 
 fun main() {
-    println(Day14.parse(Reader.Read("day14.txt")).part2())
+    println(Day17.parse(Reader.Read("day17.txt")).part1())
 }
